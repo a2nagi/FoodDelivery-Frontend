@@ -27,7 +27,12 @@ class App extends Component {
     })
   }
 
- // Eve
+  deletePersonHandler = (personIndex) => {
+    const persons = this.state.persons;
+    persons.splice(personIndex, 1);
+    this.setState({persons: persons})
+  }
+
   nameChangeHandler = (event) => {
     this.setState({
       persons: [
@@ -52,14 +57,18 @@ class App extends Component {
       cursor: 'pointer'
     };
 
-    return(
-      <div className="App">
-        <h1> Hi I'm a react app!</h1>
-        <p>This is really Working!</p>
-        <button style = {style} onClick={this.togglePersonsHandler}>Switch name</button>
-        { this.state.showPersons ?
+    let persons = null;
+    if (this.state.showPersons){
+      persons = (
         <div>
-          <Person 
+          {this.state.persons.map((person, index) => {
+            return <Person 
+                    click={() => this.deletePersonHandler(index)}
+                    name={person.name} 
+                    age={person.age}/>
+          })}
+
+          {/* <Person 
             name ={this.state.persons[0].name} 
             age={this.state.persons[0].age}/>
           <Person 
@@ -69,9 +78,17 @@ class App extends Component {
             changed={this.nameChangeHandler}>My Hobbies: Racing </Person>
           <Person 
             name={this.state.persons[2].name} 
-            age={this.state.persons[2].age}/>
-        </div> : null }
+            age={this.state.persons[2].age}/> */}
+        </div> 
+      )
+    }
 
+    return(
+      <div className="App">
+        <h1> Hi I'm a react app!</h1>
+        <p>This is really Working!</p>
+        <button style = {style} onClick={this.togglePersonsHandler}>Toggle Persons</button>
+        {persons}
       </div>
     
     // The way we use React.createElement below is the exact same as the html above. In fact the above gets compiled 
